@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c0000847-8feb-419c-8f61-f11f790074ec" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="1r7NGz01rA0ftgl2LBJGvVFKWqx" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="proofread" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c0000847-8feb-419c-8f61-f11f790074ec" name="Default Changelist" comment="" />
+      <created>1618323079473</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1618323079473</updated>
+      <workItem from="1618323082596" duration="2426000" />
+      <workItem from="1618381749215" duration="16978000" />
+      <workItem from="1618472787015" duration="16303000" />
+      <workItem from="1618554818439" duration="2861000" />
+      <workItem from="1618559568610" duration="3493000" />
+      <workItem from="1618567263335" duration="5682000" />
+      <workItem from="1618584940520" duration="22000" />
+      <workItem from="1618819862652" duration="13356000" />
+      <workItem from="1618900626691" duration="13783000" />
+      <workItem from="1619007370897" duration="1713000" />
+      <workItem from="1619083054921" duration="6043000" />
+      <workItem from="1619098370595" duration="5109000" />
+      <workItem from="1619159856786" duration="6598000" />
+      <workItem from="1619419071226" duration="12217000" />
+      <workItem from="1619510368103" duration="3174000" />
+      <workItem from="1620129227631" duration="56000" />
+      <workItem from="1620225634876" duration="190000" />
+      <workItem from="1620291696780" duration="561000" />
+      <workItem from="1620632974502" duration="1585000" />
+      <workItem from="1621235473111" duration="1070000" />
+      <workItem from="1622451780020" duration="140000" />
+      <workItem from="1622470461428" duration="2381000" />
+      <workItem from="1622531113306" duration="3144000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

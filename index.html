@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Carte Interactive de la commune de Bully-les-Mines</title>
+    <style type="text/css">
+        @media (max-width: 1024px) {
+            #page {
+                width: 100%;
+                height: 100%;
+                zoom: 1.2;
+            }
+        }
+        @media (min-width: 1024px) {
+            #page {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .gm-style-iw {
+            width: 400px !important;
+            top: 15px !important;
+            left: 0px !important;
+            background-color: #fff;
+            box-shadow: 0 1px 6px #AFAFAF;
+            border: 1px solid #AFAFAF;
+            border-radius: 2px 2px 10px 10px;
+        }
+
+        .SizeSousCategorie {
+            font-size: 20px;
+        }
+        .style-sous-categorie {
+            font-size: 15px;
+            text-indent: 3%;
+        }
+        .info-contact {
+            font-size: 16px;
+        }
+        .sous-titre {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 5px 0;
+        }
+
+        #popup {
+            margin-bottom: 10px;
+        }
+        #contenu {
+            margin-left: 20px;
+        }
+        #popup .titre {
+            font-family: 'Open Sans Condensed', sans-serif;
+            font-size: 30px;
+            font-weight: bold;
+            padding: 10px;
+            color: white;
+            text-align: center;
+            margin: 0;
+            border-radius: 2px 2px 0 0;
+        }
+
+        .ColorMarron {
+            color: #582900;
+        }
+        .colorViolet {
+            background-color: #4F00B0;
+        }
+        .colorOrange {
+            background-color: #C84600;
+        }
+        .colorRougeFonce {
+            background-color: #AD1A00;
+        }
+        .colorRose {
+            background-color: #DB0064;
+        }
+        .colorVert {
+            background-color: #0D6E00;
+        }
+        .colorBleu {
+            background-color: #00449B;
+        }
+        .colorBleuFonce {
+            background-color: #050043;
+        }
+        .colorMauve {
+            background-color: #B3288B;
+        }
+        .colorGris {
+            background-color: #636363;
+        }
+        a {
+            color: black;
+            font-weight: bold;
+        }
+        a:link {
+            text-decoration:none;
+        }
+    </style>
+    <script>
+        function initMap() {
+            <!-- Déclaration de position des infrastructures -->
+            const bully = {lat: 50.446377667980464, lng: 2.720974792990469};
+            const mairie = {lat: 50.44320745639113, lng: 2.7178741594240043};
+            const MaisonDesAsso = {lat: 50.442552042472094, lng: 2.7203179737460412};
+            const CAJ = {lat: 50.44123917538353, lng: 2.7380079651755604};
+            const MaisonSolidarite = {lat: 50.443871105667476, lng: 2.7223183010566068};
+            const EcoleColibris = {lat: 50.44243876110749, lng: 2.7105397159322546};
+            const EcoleJeanFontaine = {lat: 50.458587498974076, lng: 2.718025388080924};
+            const EcoleVictoireLampin = {lat: 50.44873860227194, lng: 2.713194197437599};
+            const EcoleLouisLumiere = {lat: 50.44260884239667, lng: 2.725791126860216};
+            const EcoleEmilienneMoreau = {lat: 50.441762744955206, lng: 2.739313169305354};
+            const EspaceJeunesse = {lat: 50.445437190715545, lng: 2.727672072956133};
+            const MaisonQuartierJeanMace = {lat: 50.44169941217301, lng: 2.738291198141182};
+            const ResidenceAMD = {lat: 50.45587769496155, lng: 2.7175922478455665};
+            const StadeCorbelle = {lat: 50.447614134220444, lng: 2.727291510322072};
+            const SalleTernois = {lat: 50.43674710055745, lng: 2.7261540065574565};
+            const ComplexeMarcelBecq = {lat: 50.45309955670656, lng: 2.718929811634203};
+            const CollegeAnitaConti = {lat: 50.43747474724853, lng: 2.7247712469267222};
+            const LyceeLeoLagrange = {lat: 50.437939416775876, lng: 2.7119851566175956};
+            const ComplexePierreMauroy = {lat: 50.437156560024654, lng: 2.7113513691184115};
+            const EcoleSuzanneBlin = {lat: 50.44127162770474, lng: 2.721612199489483};
+            const EcoleFrancoisBrasme = {lat: 50.44327188771625, lng: 2.7244704390605614};
+            const EcoleGeorgeSand = {lat: 50.45782408796726, lng: 2.72236078282792};
+            const EcoleJeanZay = {lat: 50.462807326043084, lng: 2.71202853364299};
+            const EcoleAlouettes = {lat: 50.44274354960456, lng: 2.736872856475183};
+            const Cimetiere = {lat: 50.44746507910268, lng: 2.717635414081868};
+            const ASVP = {lat: 50.44570596829825, lng: 2.7268896387615777};
+            const EspaceFM = {lat: 50.44549333581534, lng: 2.7226819680815737};
+            const EspaceCulturelEP = {lat: 50.44651574272313, lng: 2.7204026771936842};
+            const MaisonQuartierBergerie = {lat: 50.45740742740504, lng: 2.7224533190366516};
+
+            <!-- Variable InfoWindow -->
+            var activeInfoWindow;
+
+            <!-- Style Map -->
+            var styleCarte = [{
+                featureType: "poi",
+                elementType: "labels",
+                <!-- Marqueur généré par Google enlevé -->
+                stylers: [{
+                    visibility: "off"
+                }]
+            }];
+
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 15,
+                center: bully,
+                styles: styleCarte,
+            });
+
+            <!-- Information Mairie de Bully-les-Mines -->
+            const informationMairie =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorRougeFonce">Mairie de<br>Bully&#45;les&#45;Mines</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées Mairie -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            '<div class="info-contact"><img src=\"adresse.png\"> 62 Rue Fran&ccedil;ois Brasme</div>' +
+                            '<div class="info-contact"><img src=\"tel.png\"> 03.21.44.92.89</div>' +
+                            '<div class="info-contact"><img src=\"mail.png\"> contact@mairiebully.fr</div>' +
+                            '<div class="info-contact"><img src=\"fb.png\"> Page facebook : <a href=\"https://www.facebook.com/Ville-de-Bully-les-Mines-1539545569668876\">Ville de Bully-les-Mines</a></div>' +
+                            '<div class="info-contact"><img src=\"siteweb.png\"> Site de la ville : <a href=\"http://www.bullylesmines.fr\">http://www.bullylesmines.fr</a></div>' +
+                '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- SERVICE MAIRIE -->
+                        <!-- Etat-Civil -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Etat&#45;Civil :</b></div>' +
+                            "<div class=\"style-sous-categorie\">&#45; Mariage</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Pacs</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Acte de naissance</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Recensement militaire</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Liste &eacute;lectorale (inscription)</div><br>" +
+                        <!-- Relations Publiques -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Relations Publiques :</b></div>' +
+                            "<div class=\"style-sous-categorie\">&#45; R&eacute;servations de salle</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Gestion des associations</div><br>" +
+                        <!-- Logement -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Logement :</b></div>' +
+                            "<div class=\"style-sous-categorie\">&#45; Demande de logements</div><br>" +
+                        <!-- Urbanisme -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Urbanisme :</b></div>' +
+                            "<div class=\"style-sous-categorie\">&#45; Permis de construire</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Demandes r&eacute;glementaires</div><br>" +
+                        <!-- CCAS -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> CCAS :</b></div>' +
+                            "<div class=\"style-sous-categorie\">&#45; RSA</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Fond de Logement</div><br>" +
+                        <!-- Permanence des élus -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Permanence des &eacute;lus</b></div><br>' +
+                        '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    '</div>' +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information Maison des Associations -->
+            const informationMaisonAsso =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorRougeFonce">Maison des Associations</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées Maison des Associations -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            '<div class=\"info-contact\"><img src=\"adresse.png\"> 21 Rue Gambetta<br></div>' +
+                            '<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.44.92.91<br></div>' +
+                        '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- SERVICE Maison des Associations -->
+                        <!-- Plateforme Seniors -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Plateforme Seniors :</b></div>' +
+                            "<div class=\"style-sous-categorie\">&#45; Aide aux d&eacute;marches</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Convivialit&eacute; T&eacute;l&eacute;phonique<br><br></div>" +
+                        <!-- Permanence Administratives-->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Permanence :</b></div>' +
+                            "<div class=\"style-sous-categorie\">&#45; Permanence CAF</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Permanence Amicale La&#207;que</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Permanence Art et Cr&#233;ation</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Permanence SOLIHAND</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Permanence S&#233;curit&#233; Sociale</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Permanence Atelier de Recherche Historique</div>" +
+                        '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    "</div>" +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information CAJ -->
+            const informationCAJ =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorRougeFonce">Centre Animation Jeunesse (13&#45;17 ans)</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées CAJ -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> Boulevard Jean&#45;Jacques Rousseau<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.72.41.76 (Centre Animation Jeunesse)<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.45.48.43 (Espace Jeunesse)<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> caj.bully@wanadoo.fr<br></div>" +
+                        '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- SERVICE CAJ -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Accueil et Animation des Jeunes</b></div>' +
+                    "</div>" +
+                "</div>";
+
+            <!-- Information Maison de la Solidarite -->
+            const informationMaisonDeLaSolidarite =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorRougeFonce">Maison de la Solidarit&eacute;</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 25 Rue Jean Jaur&egrave;s<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.72.75.21<br></div>" +
+                        '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- SERVICE Maison de la Solidarite -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Nos Services :</b></div>' +
+                            "<div class=\"style-sous-categorie\">&#45; Acompagnement des associations de secours</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Petits travaux &agrave; domicile</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Navette seniors</div><br>" +
+                        '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    "</div>" +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information Ecole Les Colibris -->
+            const informationEcoleLesColibris =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorViolet">&Eacute;cole Maternelle<br> Les Colibris</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 77 Rue Sagnol<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.72.71.63<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> ecole.colibris@mairiebully.fr<br></div>" +
+                    "</div>" +
+                "</div>";
+
+            <!-- Information Ecole Jean Fontaine -->
+            const informationEcoleJeanFontaine =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorViolet">&Eacute;cole Maternelle<br> La Fontaine</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> Boulevard de la Cit&eacute; 2<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.72.86.76<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> ecole.lafontaine@mairiebully.fr<br></div>" +
+                        '<hr style="height: 2px; color: #4F00B0; background-color: #4F00B0; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    "</div>" +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information Ecole Victoire Lampin -->
+            const informationEcoleVictoireLampin =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorViolet">&Eacute;cole Maternelle<br> Victoire Lampin</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 36 Rue Jean Bart<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.72.86.74<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> ecole.lampin@mairiebully.fr<br></div>" +
+                    "</div>" +
+                "</div>";
+
+            <!-- Information Ecole Louis Lumiere -->
+            const informationEcoleLouisLumiere =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorViolet">&Eacute;cole Maternelle<br> Louis Lumi&egrave;re</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 6 Boulevard Dupuich<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.72.04.68<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> ecole.lumiere@mairiebully.fr<br></div>" +
+                        '<hr style="height: 2px; color: #4F00B0; background-color: #4F00B0; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    "</div>" +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information Ecole Emilienne Moreau -->
+            const informationEcoleEmilienneMoreau =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorViolet">&Eacute;cole Maternelle<br> Emilienne Moreau</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 23 Rue Marengo<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.72.71.52<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> ecole.moreau@mairiebully.fr<br></div>" +
+                        '<hr style="height: 2px; color: #4F00B0; background-color: #4F00B0; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    "</div>" +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information Espace Jeunesse & Affaires Scolaires -->
+            const informationEspaceJeunesse =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorRougeFonce">Espace Jeunesse &amp; Affaires Scolaires</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es Espace Jeunesse &amp; Affaires Scolaires</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 60 Rue Salengro<br><br></div>" +
+                            <!-- Coordonnées Espace Jeunesse-->
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.45.48.43 (espace jeunesse)<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> espace.jeunesse@mairiebully.fr<br><br></div>" +
+                            <!-- Coordonnées Affaires Scolaires-->
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.45.48.54 (affaires scolaires)<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> contact.affaires.scolaires@mairiebully.fr<br></div>" +
+                        '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- SERVICE Espace Jeunesse -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Espace Jeunesse :</b></div>' +
+                            "<div class=\"style-sous-categorie\">&#45; Inscriptions aux ALSH de vacances et du mercredi</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Relais Petite Enfance : Les coccinelles</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Halte&#45;garderie les 1000 pattes</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Service des Sports<br><br></div>" +
+                        <!-- SERVICE Affaires Scolaires -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Affaires Scolaires :</b></div>' +
+                            "<div class=\"style-sous-categorie\">&#45; Inscriptions dans les &eacute;coles</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Inscriptions en cantine</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Inscriptions en p&eacute;riscolaires (garderie)</div>" +
+                        '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    "</div>" +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information Maison de Quartier Jean Macé -->
+            const informationMaisonQuartierJeanMace =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorRougeFonce">Maison de Quartier<br> Jean Mac&eacute;</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 32 Boulevard Jean Jacques Rousseau<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.72.59.93<br></div>" +
+                            '<div class="info-contact"><img src=\"fb.png\"> Page facebook : <a href=\"https://www.facebook.com/Maison-de-Quartier-Jean-Mace-549999475346362\">Maison de quartier Jean Mac&eacute;</a></div>' +
+                '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- SERVICE Maison de Quartier Jean Macé -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Nos Services :</b></div>' +
+                            "<div class=\"style-sous-categorie\">&#45; Service Parentalit&eacute;</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Programme courte&#45;&eacute;chelle</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Ateliers coh&eacute;sion urbaine</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Maison de la R&eacute;novation</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Pass Num&eacute;rik</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Jardin partag&eacute;</div>" +
+                        '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    "</div>" +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information Residence AMD -->
+            const informationResidenceAMD =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorRose">R&eacute;sidence autonomie<br> Maurice Debout</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 1 Rue Rhin et Danube<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.29.22.38<br></div>" +
+                        '<hr style="height: 2px; color: #DB0064; background-color: #DB0064; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- SERVICE Résidence AMD -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> H&eacute;bergement de personnes &acirc;g&eacute;es</b></div>' +
+                        '<hr style="height: 2px; color: #DB0064; background-color: #DB0064; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    "</div>" +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information Stade Corbelle -->
+            const informationStadeCorbelle =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorVert">Stade Corbelle</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 12 Boulevard Alfred Josien<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.29.21.37<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> stade.corbelle@mairiebully.fr<br></div>" +
+                        '<hr style="height: 2px; color: #0D6E00; background-color: #0D6E00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- Descriptif stade -->
+                        '<div style="font-size: 15px;">Le stade de football accueille les matchs de l&apos;&Eacute;toile Sportive de Bully et du FC Charcot.</div> ' +
+                        '<hr style="height: 2px; color: #0D6E00; background-color: #0D6E00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    "</div>" +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information Salle Ternois -->
+            const informationSalleTernois =
+                '<div id="popup">' +
+                    '<h1 id="titre colorVert" class="titre colorVert">Salle Ternois</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> Rue Jules Verne<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.29.24.69<br></div>" +
+                        '<hr style="height: 2px; color: #0D6E00; background-color: #0D6E00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- Descriptif Salle -->
+                        '<div style="font-size: 15px;">Localis&eacute;e pr&egrave;s du coll&egrave;ge Anita Conti, cette salle permet la discipline du volleyball, du futsal et du handball.</div> ' +
+                        '<hr style="height: 2px; color: #0D6E00; background-color: #0D6E00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    "</div>" +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information Complexe Becq -->
+            const informationComplexeMarcelBecq =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorVert">Complexe Marcel Becq & Stand de tir</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> Rue Anatole France<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.44.57.37<br></div>" +
+                        '<hr style="height: 2px; color: #0D6E00; background-color: #0D6E00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- Descriptif Complexe Marcel Becq -->
+                        '<div style="font-size: 15px;">Le stand de tir r&eacute;gional offre aux pratiquant du club des Francs Tireurs Art&eacute;siens des conditions id&eacute;ales pour la pratique du pistolet, de l\'arbal&egrave;te, tir, tir &agrave; la carabine mais aussi le tennis dans la salle Becq.</div> ' +
+                        '<hr style="height: 2px; color: #0D6E00; background-color: #0D6E00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    "</div>" +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information College Anita Conti -->
+            const informationCollegeAnitaConti =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorMauve">Coll&egrave;ge Anita Conti</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> Rue Jules Verne<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.61.19.72.10<br></div>" +
+                            '<div class="info-contact"><img src=\"fb.png\"> Page facebook : <a href=\"https://www.facebook.com/Section-Football-Collège-Anita-Conti-de-Bully-les-mines-108984134316220\">Section Football</a></div>' +
+                            '<div class="info-contact"><img src=\"fb.png\"> Page facebook : <a href=\"https://www.facebook.com/UNSSCONTI\">UNSS</a></div>' +
+                            '<div class="info-contact"><img src=\"siteweb.png\"> Savoirs num&eacute;riques : <a href=\"https://anita-conti-bully-les-mines.savoirsnumeriques62.fr\">cliquez-ici</a></div>' +
+                "</div>" +
+                "</div>";
+
+            <!-- Information Lycee Leo Lagrange -->
+            const informationLyceeLeoLagrange =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorMauve">Lyc&eacute;e L&eacute;o Lagrange</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> Rue Victor Schoelcher<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.29.13.26<br></div>" +
+                            '<div class="info-contact"><img src=\"fb.png\"> Page facebook : <a href=\"https://www.facebook.com/Lycée-Léo-Lagrange-526006554077197\">Lyc&eacute;e L&eacute;o Lagrange</a></div>' +
+                            '<div class="info-contact"><img src=\"siteweb.png\"> Ent : <a href=\"https://leo-lagrange.enthdf.fr/?fbclid=IwAR2KgIMVDtaejPhQm7Jg4bR99BJaicRLA71kKrngBeoaE3fu2nisjJQ3jo0\">cliquez-ici</a></div>' +
+                    "</div>" +
+                "</div>";
+
+            <!-- Information Complexe Pierre Mauroy -->
+            const informationComplexePierreMauroy =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorVert">Complexe Pierre Mauroy</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> Rue Jesse Owens<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.44.57.37<br></div>" +
+                        '<hr style="height: 2px; color: #0D6E00; background-color: #0D6E00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- Descriptif Complexe Pierre Mauroy -->
+                        '<div style="font-size: 15px;">Le complexe sportif Pierre Mauroy a &eacute;t&eacute; inaugur&eacute; en 2006, sa polyvalence lui permet d&apos;accueillir le Handball Club Bully, le club de Tennis de table, la gymnastique, l\'halt&eacute;rophilie ainsi que le club de Judo.</div> ' +
+                        '<hr style="height: 2px; color: #0D6E00; background-color: #0D6E00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    "</div>" +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information Ecole Suzanne Blin -->
+            const informationEcoleSuzanneBlin =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorOrange">&Eacute;cole &eacute;l&eacute;mentaire<br> Suzanne Blin</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 2 Rue Condorcet<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.72.98.19<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> ecole.blin@mairiebully.fr<br></div>" +
+                    "</div>" +
+                "</div>";
+
+            <!-- Information Ecole François Brasme -->
+            const informationEcoleFrancoisBrasme =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorOrange">&Eacute;cole &eacute;l&eacute;mentaire<br> Fran&ccedil;ois Brasme</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 41 Rue L&eacute;on Baillot<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.72.75.22<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> ecole.brasme@mairiebully.fr<br></div>" +
+                    "</div>" +
+                "</div>";
+
+            <!-- Information Ecole George Sand -->
+            const informationEcoleGeorgeSand =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorOrange">&Eacute;cole &eacute;l&eacute;mentaire<br> George Sand</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 66 Boulevard de la Loire<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.45.48.74<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> ecole.sand@mairiebully.fr<br></div>" +
+                    "</div>" +
+                "</div>";
+
+            <!-- Information Ecole Jean Zay -->
+            const informationEcoleJeanZay =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorOrange">&Eacute;cole &eacute;l&eacute;mentaire<br> Jean Zay</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> Rue de Boulogne<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.72.86.60<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> ecole.zay@mairiebully.fr<br></div>" +
+                    "</div>" +
+                "</div>";
+
+            <!-- Information Ecole Alouettes -->
+            const informationEcoleAlouettes =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorOrange">&Eacute;cole &eacute;l&eacute;mentaire<br> des Alouettes</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> Rue de Lorraine<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.72.86.63<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> ecole.alouettes@mairiebully.fr<br></div>" +
+                    "</div>" +
+                "</div>";
+
+            <!-- Information Cimetiere -->
+            const informationCimetiere =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorGris">Cimeti&egrave;re Communal</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> Rue de l'&Eacute;galit&eacute;<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.29.75.90<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> cimetiere@mairiebully.fr<br></div>" +
+                    "</div>" +
+                "</div>";
+
+            <!-- Information ASVP -->
+            const informationASVP =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorBleuFonce">Brigade ASVP</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 31 ter Rue Roger Salengro<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.44.03.70<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> asvpbully@orange.fr<br></div>" +
+                        '<hr style="height: 2px; color: #050043; background-color: #050043; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- SERVICE ANNEXE -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Nos Services Annexes :</b></div>' +
+                        "<div class=\"style-sous-categorie\">&#45; Permis de Louer</div>" +
+                    "</div>" +
+                "</div>";
+
+            <!-- Information Espace Francois Mitterrand -->
+            const informationEspaceFrancoisMitterrand =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorRougeFonce">Espace Culturel<br> Fran&ccedil;ois Mitterrand</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 1/3 Rue Roger Salengro<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.72.71.90<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> administration.efm@mairiebully.fr<br></div>" +
+                            '<div class="info-contact"><img src=\"fb.png\"> Page facebook : Bully Ma Ville Culturelle</div>' +
+                            '<div class="info-contact"><img src=\"fb.png\"> Page facebook : <a href=\"https://www.facebook.com/Bully-Ma-Ville-Culturelle-1956231484622014\">Bully Ma Ville Culturelle</a></div>' +
+                '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- HORRAIRES BILLETERIE -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Horaires de la Billetterie :</b></div>' +
+                            "<div class=\"style-sous-categorie\">&#45; Mardi : 10h/12h &#45; 14h/17h</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Mercredi : 10h/12h &#45; 14h/17h</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Jeudi : 10h/12h &#45; 14h/17h</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Vendredi : 10h/12h &#45; 14h/17h</div>" +
+                        '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    "</div>" +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information Espace Culturel -->
+            const informationEspaceCulturelEdouardPignon =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorRougeFonce">Espace Culturel<br> Edouard Pignon</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> Rue Casimir Beugnet<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.45.58.50<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> espace.pignon@mairiebully.fr<br></div>" +
+                            '<div class="info-contact"><img src=\"fb.png\"> Page facebook : <a href=\"https://www.facebook.com/Bully-Ma-Ville-Culturelle-1956231484622014\">Bully Ma Ville Culturelle</a></div>' +
+                '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- SERVICES ESPACE CULTUREL -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Nos Services :</b></div>' +
+                            "<div class=\"style-sous-categorie\">&#45; Biblioth&egrave;que</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Espace Culturel</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; &Eacute;cole de musique</div>" +
+                        '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                    "</div>" +
+                    <!-- Image Défibrillateur -->
+                    '<div style="text-align: center;"><img src=\"imageMarqueur/de.png\"></div>' +
+                "</div>";
+
+            <!-- Information Maison de Quartier Bergerie -->
+            const informationMaisonQuartierBergerie =
+                '<div id="popup">' +
+                    '<h1 id="titre" class="titre colorRougeFonce">Maison de Quartier<br> La Bergerie</h1>' +
+                    '<div id="contenu">' +
+                        "<br>" +
+                        <!-- Coordonnées -->
+                        '<div class="sous-titre">Coordonn&eacute;es</div>' +
+                            "<div class=\"info-contact\"><img src=\"adresse.png\"> 66 Boulevard de la Loire<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"tel.png\"> 03.21.45.59.10<br></div>" +
+                            "<div class=\"info-contact\"><img src=\"mail.png\"> martine.manca@mairiebully.fr<br></div>" +
+                            '<div class="info-contact"><img src=\"fb.png\"> Page facebook : <a href=\"https://www.facebook.com/maisondequartierlabergerie\">Maison de quartier La Bergerie</a></div>' +
+                '<hr style="height: 2px; color: #AD1A00; background-color: #AD1A00; width: 75%; border: none; margin-top:5%; margin-bottom:5%;">' +
+                        <!-- SERVICE Maison de Quartier -->
+                        '<div class="ColorMarron SizeSousCategorie"><img src=\"fleche.png\"><b> Nos Services :</b></div>' +
+                            "<div class=\"style-sous-categorie\">&#45; Jardin partag&eacute;</div>" +
+                            "<div class=\"style-sous-categorie\">&#45; Ateliers parentalit&eacute;</div>" +
+                    "</div>" +
+                "</div>";
+
+            <!-- Contenu Infowindow -->
+            const infoMairie = new google.maps.InfoWindow({
+                content: informationMairie,
+                maxWidth: 550,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerMairie = new google.maps.Marker({
+                position: mairie,
+                map,
+                title: "Mairie de Bully-les-Mines",
+                icon: new google.maps.MarkerImage('imageMarqueur/mairie.png')
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerMairie, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoMairie.open(map, markerMairie);
+                activeInfoWindow = infoMairie;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoMairie.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoMaisonAsso = new google.maps.InfoWindow({
+                content: informationMaisonAsso,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerMaisonAsso = new google.maps.Marker({
+                position: MaisonDesAsso,
+                map,
+                title: "Maison des associations",
+                icon: new google.maps.MarkerImage('imageMarqueur/maison.asso.png'),
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerMaisonAsso, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoMaisonAsso.open(map, markerMaisonAsso);
+                activeInfoWindow = infoMaisonAsso;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoMaisonAsso.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoCAJ = new google.maps.InfoWindow({
+                content: informationCAJ,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerCAJ = new google.maps.Marker({
+                position: CAJ,
+                map,
+                title: "CAJ",
+                icon: new google.maps.MarkerImage('imageMarqueur/caj.png')
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerCAJ, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoCAJ.open(map, markerCAJ);
+                activeInfoWindow = infoCAJ;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoCAJ.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoMaisonSolidarite = new google.maps.InfoWindow({
+                content: informationMaisonDeLaSolidarite,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerMaisonSolidarite = new google.maps.Marker({
+                position: MaisonSolidarite,
+                map,
+                title: "Maison de la solidarite",
+                icon: new google.maps.MarkerImage('imageMarqueur/maison.solidarite.png')
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerMaisonSolidarite, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoMaisonSolidarite.open(map, markerMaisonSolidarite);
+                activeInfoWindow = infoMaisonSolidarite;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoMaisonSolidarite.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoEcoleLesColibris = new google.maps.InfoWindow({
+                content: informationEcoleLesColibris,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerEcoleColibris = new google.maps.Marker({
+                position: EcoleColibris,
+                map,
+                title: "Ecole maternelle Les Colibris",
+                icon: new google.maps.MarkerImage("imageMarqueur/ecolem.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerEcoleColibris, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoEcoleLesColibris.open(map, markerEcoleColibris);
+                activeInfoWindow = infoEcoleLesColibris;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoEcoleLesColibris.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoEcoleJeanFontaine = new google.maps.InfoWindow({
+                content: informationEcoleJeanFontaine,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerEcoleJeanFontaine = new google.maps.Marker({
+                position: EcoleJeanFontaine,
+                map,
+                title: "Ecole maternelle La Fontaine",
+                icon: new google.maps.MarkerImage("imageMarqueur/ecolem.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerEcoleJeanFontaine, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoEcoleJeanFontaine.open(map, markerEcoleJeanFontaine);
+                activeInfoWindow = infoEcoleJeanFontaine;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoEcoleJeanFontaine.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoEcoleVictoireLampin = new google.maps.InfoWindow({
+                content: informationEcoleVictoireLampin,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerEcoleVictoireLampin = new google.maps.Marker({
+                position: EcoleVictoireLampin,
+                map,
+                title: "Ecole maternelle Victoire Lampin",
+                icon: new google.maps.MarkerImage("imageMarqueur/ecolem.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerEcoleVictoireLampin, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoEcoleVictoireLampin.open(map, markerEcoleVictoireLampin);
+                activeInfoWindow = infoEcoleVictoireLampin;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoEcoleVictoireLampin.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoEcoleLouisLumiere = new google.maps.InfoWindow({
+                content: informationEcoleLouisLumiere,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerEcoleLouisLumiere = new google.maps.Marker({
+                position: EcoleLouisLumiere,
+                map,
+                title: "Ecole maternelle Louis Lumiere",
+                icon: new google.maps.MarkerImage("imageMarqueur/ecolem.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerEcoleLouisLumiere, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoEcoleLouisLumiere.open(map, markerEcoleLouisLumiere);
+                activeInfoWindow = infoEcoleLouisLumiere;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoEcoleLouisLumiere.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoEcoleEmilienneMoreau = new google.maps.InfoWindow({
+                content: informationEcoleEmilienneMoreau,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerEcoleEmilienneMoreau = new google.maps.Marker({
+                position: EcoleEmilienneMoreau,
+                map,
+                title: "Ecole maternelle Emilienne Moreau",
+                icon: new google.maps.MarkerImage("imageMarqueur/ecolem.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerEcoleEmilienneMoreau, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoEcoleEmilienneMoreau.open(map, markerEcoleEmilienneMoreau);
+                activeInfoWindow = infoEcoleEmilienneMoreau;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoEcoleEmilienneMoreau.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoEspaceJeunesse = new google.maps.InfoWindow({
+                content: informationEspaceJeunesse,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerEspaceJeunesse = new google.maps.Marker({
+                position: EspaceJeunesse,
+                map,
+                title: "Espace Jeunesse",
+                icon: new google.maps.MarkerImage("imageMarqueur/espace.jeunesse.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerEspaceJeunesse, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoEspaceJeunesse.open(map, markerEspaceJeunesse);
+                activeInfoWindow = infoEspaceJeunesse;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoEspaceJeunesse.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoMaisonQuartierJeanMace = new google.maps.InfoWindow({
+                content: informationMaisonQuartierJeanMace,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerMaisonQuartierJeanMace = new google.maps.Marker({
+                position: MaisonQuartierJeanMace,
+                map,
+                title: "Maison de Quartier Jean Mace",
+                icon: new google.maps.MarkerImage("imageMarqueur/maison.quartier.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerMaisonQuartierJeanMace, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoMaisonQuartierJeanMace.open(map, markerMaisonQuartierJeanMace);
+                activeInfoWindow = infoMaisonQuartierJeanMace;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoMaisonQuartierJeanMace.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoResidenceAMD = new google.maps.InfoWindow({
+                content: informationResidenceAMD,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerResidenceAMD = new google.maps.Marker({
+                position: ResidenceAMD,
+                map,
+                title: "Residence autonomie Maurice Debout",
+                icon: new google.maps.MarkerImage("imageMarqueur/maurice.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerResidenceAMD, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoResidenceAMD.open(map, markerResidenceAMD);
+                activeInfoWindow = infoResidenceAMD;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoResidenceAMD.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoStadeCorbelle = new google.maps.InfoWindow({
+                content: informationStadeCorbelle,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerStadeCorbelle = new google.maps.Marker({
+                position: StadeCorbelle,
+                map,
+                title: "Stade Rene Corbelle",
+                icon: new google.maps.MarkerImage("imageMarqueur/stadefoot.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerStadeCorbelle, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoStadeCorbelle.open(map, markerStadeCorbelle);
+                activeInfoWindow = infoStadeCorbelle;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoStadeCorbelle.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoSalleTernois = new google.maps.InfoWindow({
+                content: informationSalleTernois,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerSalleTernois = new google.maps.Marker({
+                position: SalleTernois,
+                map,
+                title: "Salle Henri Ternois",
+                icon: new google.maps.MarkerImage("imageMarqueur/complexe.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerSalleTernois, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoSalleTernois.open(map, markerSalleTernois);
+                activeInfoWindow = infoSalleTernois;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoSalleTernois.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoComplexeMarcelBecq = new google.maps.InfoWindow({
+                content: informationComplexeMarcelBecq,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerComplexeMarcelBecq = new google.maps.Marker({
+                position: ComplexeMarcelBecq,
+                map,
+                title: "Complexe Marcel Becq",
+                icon: new google.maps.MarkerImage("imageMarqueur/complexe.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerComplexeMarcelBecq, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoComplexeMarcelBecq.open(map, markerComplexeMarcelBecq);
+                activeInfoWindow = infoComplexeMarcelBecq;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoComplexeMarcelBecq.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoCollegeAnitaConti = new google.maps.InfoWindow({
+                content: informationCollegeAnitaConti,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerCollegeAnitaConti = new google.maps.Marker({
+                position: CollegeAnitaConti,
+                map,
+                title: "College Anita Conti",
+                icon: new google.maps.MarkerImage("imageMarqueur/collegelycee.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerCollegeAnitaConti, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoCollegeAnitaConti.open(map, markerCollegeAnitaConti);
+                activeInfoWindow = infoCollegeAnitaConti;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoCollegeAnitaConti.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoLyceeLeoLagrange = new google.maps.InfoWindow({
+                content: informationLyceeLeoLagrange,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerLyceeLeoLagrange = new google.maps.Marker({
+                position: LyceeLeoLagrange,
+                map,
+                title: "Lycee Leo Lagrange",
+                icon: new google.maps.MarkerImage("imageMarqueur/collegelycee.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerLyceeLeoLagrange, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoLyceeLeoLagrange.open(map, markerLyceeLeoLagrange);
+                activeInfoWindow = infoLyceeLeoLagrange;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoLyceeLeoLagrange.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoComplexePierreMauroy = new google.maps.InfoWindow({
+                content: informationComplexePierreMauroy,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerComplexePierreMauroy = new google.maps.Marker({
+                position: ComplexePierreMauroy,
+                map,
+                title: "Complexe Pierre Mauroy",
+                icon: new google.maps.MarkerImage("imageMarqueur/complexe.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerComplexePierreMauroy, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoComplexePierreMauroy.open(map, markerComplexePierreMauroy);
+                activeInfoWindow = infoComplexePierreMauroy;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoComplexePierreMauroy.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoEcoleSuzanneBlin = new google.maps.InfoWindow({
+                content: informationEcoleSuzanneBlin,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerEcoleSuzanneBlin = new google.maps.Marker({
+                position: EcoleSuzanneBlin,
+                map,
+                title: "Ecole elementaire Suzanne Blin",
+                icon: new google.maps.MarkerImage("imageMarqueur/ecolep.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerEcoleSuzanneBlin, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoEcoleSuzanneBlin.open(map, markerEcoleSuzanneBlin);
+                activeInfoWindow = infoEcoleSuzanneBlin;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoEcoleSuzanneBlin.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoEcoleFrancoisBrasme = new google.maps.InfoWindow({
+                content: informationEcoleFrancoisBrasme,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerEcoleFrancoisBrasme = new google.maps.Marker({
+                position: EcoleFrancoisBrasme,
+                map,
+                title: "Ecole elementaire Francois Brasme",
+                icon: new google.maps.MarkerImage("imageMarqueur/ecolep.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerEcoleFrancoisBrasme, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoEcoleFrancoisBrasme.open(map, markerEcoleFrancoisBrasme);
+                activeInfoWindow = infoEcoleFrancoisBrasme;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoEcoleFrancoisBrasme.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoEcoleGeorgeSand = new google.maps.InfoWindow({
+                content: informationEcoleGeorgeSand,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerEcoleGeorgeSand = new google.maps.Marker({
+                position: EcoleGeorgeSand,
+                map,
+                title: "Ecole elementaire George Sand",
+                icon: new google.maps.MarkerImage("imageMarqueur/ecolep.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerEcoleGeorgeSand, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoEcoleGeorgeSand.open(map, markerEcoleGeorgeSand);
+                activeInfoWindow = infoEcoleGeorgeSand;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoEcoleGeorgeSand.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoEcoleJeanZay = new google.maps.InfoWindow({
+                content: informationEcoleJeanZay,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerEcoleJeanZay = new google.maps.Marker({
+                position: EcoleJeanZay,
+                map,
+                title: "Ecole elementaire Jean Zay",
+                icon: new google.maps.MarkerImage("imageMarqueur/ecolep.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerEcoleJeanZay, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoEcoleJeanZay.open(map, markerEcoleJeanZay);
+                activeInfoWindow = infoEcoleJeanZay;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoEcoleJeanZay.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoEcoleAlouettes = new google.maps.InfoWindow({
+                content: informationEcoleAlouettes,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerEcoleAlouettes = new google.maps.Marker({
+                position: EcoleAlouettes,
+                map,
+                title: "Ecole elementaire des Alouettes",
+                icon: new google.maps.MarkerImage("imageMarqueur/ecolep.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerEcoleAlouettes, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoEcoleAlouettes.open(map, markerEcoleAlouettes);
+                activeInfoWindow = infoEcoleAlouettes;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoEcoleAlouettes.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoCimetiere = new google.maps.InfoWindow({
+                content: informationCimetiere,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerCimetiere = new google.maps.Marker({
+                position: Cimetiere,
+                map,
+                title: "Cimetiere communal",
+                icon: new google.maps.MarkerImage("imageMarqueur/cimetiere.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerCimetiere, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoCimetiere.open(map, markerCimetiere);
+                activeInfoWindow = infoCimetiere;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoCimetiere.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoASVP = new google.maps.InfoWindow({
+                content: informationASVP,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerASVP = new google.maps.Marker({
+                position: ASVP,
+                map,
+                title: "Brigade ASVP",
+                icon: new google.maps.MarkerImage("imageMarqueur/asvp.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerASVP, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoASVP.open(map, markerASVP);
+                activeInfoWindow = infoASVP;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoASVP.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoEspaceFM = new google.maps.InfoWindow({
+                content: informationEspaceFrancoisMitterrand,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerEspaceFM = new google.maps.Marker({
+                position: EspaceFM,
+                map,
+                title: "Espace Francois Mitterrand",
+                icon: new google.maps.MarkerImage("imageMarqueur/espace.francois.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerEspaceFM, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoEspaceFM.open(map, markerEspaceFM);
+                activeInfoWindow = infoEspaceFM;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoEspaceFM.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoEspaceEP = new google.maps.InfoWindow({
+                content: informationEspaceCulturelEdouardPignon,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerEspaceEP = new google.maps.Marker({
+                position: EspaceCulturelEP,
+                map,
+                title: "Espace Culturel Edouard Pignon",
+                icon: new google.maps.MarkerImage("imageMarqueur/edouard.pignon.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerEspaceEP, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoEspaceEP.open(map, markerEspaceEP);
+                activeInfoWindow = infoEspaceEP;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoEspaceEP.close();
+            });
+
+            <!-- Contenu Infowindow -->
+            const infoMaisonDeQuartierLaBergerie = new google.maps.InfoWindow({
+                content: informationMaisonQuartierBergerie,
+            });
+            <!-- Affichage Marker sur map -->
+            const markerMaisonQuartierBergerie = new google.maps.Marker({
+                position: MaisonQuartierBergerie,
+                map,
+                title: "Maison de Quartier La Bergerie",
+                icon: new google.maps.MarkerImage("imageMarqueur/maison.quartier.png")
+            });
+            <!-- Ouverture Infowindow au clic sur le Marker -->
+            google.maps.event.addListener(markerMaisonQuartierBergerie, 'click', function () {
+                if (activeInfoWindow) { activeInfoWindow.close();}
+                infoMaisonDeQuartierLaBergerie.open(map, markerMaisonQuartierBergerie);
+                activeInfoWindow = infoMaisonDeQuartierLaBergerie;
+            });
+            <!-- Fermeture Infowindow au clic sur la carte -->
+            google.maps.event.addListener(map, 'click', function () {
+                infoMaisonDeQuartierLaBergerie.close();
+            });
+
+        }
+    </script>
+</head>
+<body>
+<div id="page">
+<div id="map"></div>
+</div>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBccQr29AS4zL1PZ39CvSkRD592kwoM6N0&callback=initMap&libraries=&v=weekly&setBuiltInZoomControls=false" async></script>
+</body>
+</html>
